@@ -5,7 +5,7 @@ using UnityEngine;
 public class PhantomCharge : MonoBehaviour , IPhantomState{
 
 	public void OnEnter(Phantom arg_phantom) {
-
+		arg_phantom.gameObject.SetActive(true);
 	}
 
 	public void OnUpdate(Phantom arg_phantom) {
