@@ -50,6 +50,8 @@ public class Player : PlayerBase{
 	// Update is called once per frame
 	void Update () {
 
+		if (GameManager.Instance.GetCurrentPhase() != "Playing") return;
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             OnHit();

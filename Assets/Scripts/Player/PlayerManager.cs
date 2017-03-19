@@ -12,7 +12,7 @@ public class PlayerManager : MonoBehaviour {
         {
             if (m_instance == null)
             {
-                m_instance = FindObjectOfType<PlayerManager>();
+				m_instance = new GameObject("PlayerManager").AddComponent<PlayerManager>();
             }
             return m_instance;
         }
@@ -27,13 +27,14 @@ public class PlayerManager : MonoBehaviour {
 
 	private Phantom m_phantom;
 
-    // Use this for initialization
-    void Start () {
-        Initialize();
+	public void Initialize() {
+		Instantiate(Resources.Load<GameObject>("Prefabs/Player") , GameManager.Instance.transform.position , Quaternion.identity);
+		m_player = FindObjectOfType<Player>();
+		m_phantom = FindObjectOfType<Phantom>();
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
+	public void UpdateByFrame () {
 
 		switch (Player.GetState()) {
 			case PlayerBase.State.Move: ConvertStateIfNeed(PlayerBase.State.Move , new PhantomMove()); break;
@@ -53,9 +54,6 @@ public class PlayerManager : MonoBehaviour {
 		return arg_a == arg_b;
 	}
 
-    public void Initialize() {
-     	m_player = FindObjectOfType<Player>();
-		m_phantom = FindObjectOfType<Phantom>();
-	}
+    
 	
 }
