@@ -18,6 +18,15 @@ public class Phantom : PlayerBase {
 	
 	// Update is called once per frame
 	void Update () {
+
+		Vector3 playerPos = PlayerManager.Instance.Player.transform.position;
+		Vector3 myPos = this.transform.position;
+
+		m_direction = playerPos - myPos;
+		m_distanceToPlayer = Vector2.Distance(playerPos , myPos);
+
+
+		//ステートの処理を実行
 		m_currentState.OnUpdate(this);
 	}
 
@@ -38,6 +47,10 @@ public class Phantom : PlayerBase {
 	
 	public Vector2 GetDirection() {
 		return m_direction;
+	}
+
+	public float GetDistanceToPlayer() {
+		return m_distanceToPlayer;
 	}
 
 	public PlayerBase.State GetCurrentState() {

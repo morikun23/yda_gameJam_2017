@@ -4,19 +4,24 @@ using UnityEngine;
 
 public class PhantomCharge : MonoBehaviour , IPhantomState{
 
-	private int m_chargingCount;
+	private float m_chargingCount;
 
 	public void OnEnter(Phantom arg_phantom) {
 		arg_phantom.gameObject.SetActive(true);
+		m_chargingCount = 0;
 	}
 
 	public void OnUpdate(Phantom arg_phantom) {
 
-		m_chargingCount++;
+		if (arg_phantom.GetDistanceToPlayer() < 5f) {
+			m_chargingCount += Time.deltaTime;
+		}
+		
+		Player player = PlayerManager.Instance.Player;
 
 		arg_phantom.transform.position =
-			PlayerManager.Instance.Player.transform.position +
-			(Vector3)arg_phantom.GetDirection().normalized * m_chargingCount;
+			player.transform.position +
+			(Vector3)player.GetDirection().normalized * m_chargingCount;
 
 	}
 

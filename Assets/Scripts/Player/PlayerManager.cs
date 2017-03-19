@@ -30,8 +30,6 @@ public class PlayerManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         Initialize();
-		m_player = FindObjectOfType<Player>();
-		m_phantom = FindObjectOfType<Phantom>();
 	}
 	
 	// Update is called once per frame
@@ -43,18 +41,11 @@ public class PlayerManager : MonoBehaviour {
 			case PlayerBase.State.Attacking: ConvertStateIfNeed(PlayerBase.State.Attacking , new PhantomAttacking()); break;
 			case PlayerBase.State.Damaging: ConvertStateIfNeed(PlayerBase.State.Damaging , new PhantomDamaging()); break;
 		}
-		if (Player.GetState() == PlayerBase.State.Charge) {
-			//チャージ開始
-			m_phantom.StateTransition(new PhantomCharge());
-		}
-		if (Player.GetState() == PlayerBase.State.Attacking) {
-			//攻撃開始
-			
-		}
 	}
 	
 	private void ConvertStateIfNeed(PlayerBase.State arg_playerState,IPhantomState arg_phantomState) {
 		if (IsSameState(arg_playerState , m_phantom.GetCurrentState())) return;
+		Debug.Log("ステート変更");
 		m_phantom.StateTransition(arg_phantomState);
 	}
 
@@ -64,6 +55,7 @@ public class PlayerManager : MonoBehaviour {
 
     public void Initialize() {
      	m_player = FindObjectOfType<Player>();
-    }
+		m_phantom = FindObjectOfType<Phantom>();
+	}
 	
 }

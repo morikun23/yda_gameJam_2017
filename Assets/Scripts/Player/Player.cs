@@ -186,4 +186,7 @@ public class Player : PlayerBase{
         return state;
     }
 
+	public Vector2 GetDirection() {
+		return mousePosition - transform.position; 
+	}
 }

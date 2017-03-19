@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour {
 
 	private int m_killedCount;
 
-	private int m_chargePower;
+	private int m_bonusPower;
 
 	private float m_limitTime;
 
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour {
 
 	public void Initialize() {
 		m_killedCount = 0;
-		m_chargePower = 1;
+		m_bonusPower = 1;
 		m_limitTime = 30f;
 		m_currentPhase = new IntroductionPhase();
 		m_currentPhase.OnEnter(this);
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public int GetChargedPower() {
-		return m_chargePower;
+		return m_bonusPower;
 	}
 
 	public float GetLimitTime() {
