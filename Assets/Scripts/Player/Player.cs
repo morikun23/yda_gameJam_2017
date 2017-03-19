@@ -82,7 +82,7 @@ public class Player : PlayerBase{
 
                 break;
 
-            case State.Dameging:
+            case State.Damaging:
 
                 //ダメージ演出したい
                 if (Time.time > nextTime)
@@ -160,10 +160,10 @@ public class Player : PlayerBase{
     /// </summary>
     public void OnHit()
     {
-        if (state == State.Dameging) return;
+        if (state == State.Damaging) return;
 
         nextTime = Time.time;
-        state = State.Dameging;
+        state = State.Damaging;
         Invoke("ChengeStateMove", stopTime);
     }
 
@@ -181,7 +181,7 @@ public class Player : PlayerBase{
     /// <summary>
     /// 現在のプレイヤーのステートを取得
     /// </summary>
-    State GetState()
+    public State GetState()
     {
         return state;
     }

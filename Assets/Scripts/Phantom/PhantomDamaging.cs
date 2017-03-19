@@ -17,6 +17,6 @@ public class PhantomDamaging : MonoBehaviour , IPhantomState{
 	}
 
 	public PlayerBase.State GetCurrentState() {
-		return PlayerBase.State.Dameging;
+		return PlayerBase.State.Damaging;
 	}
 }

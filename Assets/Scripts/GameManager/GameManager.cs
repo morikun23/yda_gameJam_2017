@@ -28,8 +28,6 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Initialize();
-		m_currentPhase = new IntroductionPhase();
-		m_currentPhase.OnEnter(this);
 	}
 	
 	// Update is called once per frame
@@ -53,6 +51,8 @@ public class GameManager : MonoBehaviour {
 		m_killedCount = 0;
 		m_chargePower = 1;
 		m_limitTime = 30f;
+		m_currentPhase = new IntroductionPhase();
+		m_currentPhase.OnEnter(this);
 	}
 
 	public int GetKilledCount() {
