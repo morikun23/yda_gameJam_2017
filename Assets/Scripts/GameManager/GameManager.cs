@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour {
 	public void Initialize() {
 		m_killedCount = 0;
 		m_chargePower = 1;
-		m_limitTime = 3f;
+		m_limitTime = 30f;
 	}
 
 	public int GetKilledCount() {
