@@ -1,20 +1,29 @@
-﻿/*
+﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class Power_Mater : MonoBehaviour {
-    float time;
-    // Use this for initialization
-    void timerStart()
+public class Power_Mater : MonoBehaviour
+{
+    Image image;
+
+    void Start()
     {
-        float time = 5f;
-        iTween.ScaleTo(this.gameObject, iTween.Hash("y", 0f, "time", time));
+        image = GetComponent<Image>();
+        Debug.Log("ここまで到達①");　//チェックログ①
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) //今が左クリックで0.02ずつfillAmountが増えていきます
+        {
+            image.fillAmount += 0.02f;
+            Debug.Log("ボタンが押されておりました");//チェックログ②
+
+            if (image.fillAmount >= 1)  //ＭＡＸ（1）まで到達するとAmountが0へと戻ります
+            {
+                image.fillAmount = 0;
+            }
+        }
+
+    }
 }
-*/

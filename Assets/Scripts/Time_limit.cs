@@ -1,4 +1,4 @@
-﻿/*
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,20 +8,20 @@ public class Time_limit : MonoBehaviour
 {
 
     Text text;
-    GameManager gameManager;
+    
 
     // Use this for initialization
     void Start()
     {
         text = GetComponent<Text>();
-        gameManager = GameObject.Find("GameManeger").GetComponent<Gamemaneger>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        int time = (int)gameManager.GetLimitTime();
+        
+        int time = (int)GameManager.Instance.GetLimitTime();
         text.text = time.ToString();
     }
 }
-*/
