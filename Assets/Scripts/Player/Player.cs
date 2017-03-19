@@ -177,4 +177,13 @@ public class Player : PlayerBase{
         state = State.Move;
 
     }
+
+    /// <summary>
+    /// 現在のプレイヤーのステートを取得
+    /// </summary>
+    State GetState()
+    {
+        return state;
+    }
+
 }
