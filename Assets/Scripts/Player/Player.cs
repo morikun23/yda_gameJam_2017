@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
 
     //プレイヤーの移動量
     float playerSpeed = 0.02f;
+    float chargeSpeed = 0.01f;
 
     //硬直時間
     float stopTime = 3;
@@ -18,7 +19,8 @@ public class Player : MonoBehaviour {
     //プレイヤーの各状態を表すステート
     enum PlayerState
     {
-        Idle,//通常　動いてる状態
+        Stop,//ストップ
+        Move,//動いてる状態
         Charge,//スタンドを飛ばしている状態
         Attacking,//スタンドとどっきんぐ中☆
         Dameging//硬直なう
@@ -29,7 +31,7 @@ public class Player : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        state = PlayerState.Idle;
+        state = PlayerState.Move;
 
 
         screenMousePosition = Input.mousePosition;
@@ -47,14 +49,20 @@ public class Player : MonoBehaviour {
         switch (state)
         {
 
-            case PlayerState.Idle:
+            case PlayerState.Move:
 
                 playerMove(playerSpeed);
+
+                //左クリックでチャージStateへ移行
+                if (Input.GetMouseButtonDown(0)) state = PlayerState.Charge;
 
                 break;
 
             case PlayerState.Charge:
-                
+                playerMove(chargeSpeed);
+
+                //左クリックを離すとアタックStateへ移行
+                if (Input.GetMouseButtonUp(0)) state = PlayerState.Attacking;
 
                 break;
 
@@ -64,12 +72,11 @@ public class Player : MonoBehaviour {
 
             case PlayerState.Dameging:
 
-                
+                //ダメージ演出したい
 
                 break;
 
         }
-
 
         
 	}
@@ -111,4 +118,21 @@ public class Player : MonoBehaviour {
         transform.position += new Vector3(x, y, 0);
     }
 
+    /// <summary>
+    /// エネミー側で呼んでもらうダメージ関数
+    /// </summary>
+    public void OnHit()
+    {
+        state = PlayerState.Dameging;
+        Invoke("ChengeStateMove", stopTime);
+    }
+
+    /// <summary>
+    /// Moveステート変更関数
+    /// </summary>
+    void ChengeStateMove()
+    {
+        state = PlayerState.Move;
+
+    }
 }

@@ -65,7 +65,7 @@ public class Hansam : MonoBehaviour {
     /// <summary>
     /// 当たった時のリアクション
     /// </summary>
-    void OnTriggerEnter(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         
         /*if ()
