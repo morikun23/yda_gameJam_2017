@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+public class Player : PlayerBase{
 
     //マウスのポジション
     Vector3 screenMousePosition;
@@ -16,26 +16,21 @@ public class Player : MonoBehaviour {
     //硬直時間
     float stopTime = 3;
 
-    //プレイヤーの各状態を表すステート
-    enum PlayerState
-    {
-        Move,//動いてる状態
-        Charge,//スタンドを飛ばしている状態
-        Attacking,//スタンドとどっきんぐ中☆
-        Damaging//硬直なう
-    }
-
-    PlayerState state;
-
     //点滅用
     SpriteRenderer renderer;
     float nextTime = 0;
     float interval = 0.1f;
 
+    //移動制限の壁
+    GameObject UpLeftWall, DownRightWall;
+
+    //スタンドを出す方向を示す矢印関連
+    GameObject standDirectionArrow;
+
     // Use this for initialization
     void Start () {
 
-        state = PlayerState.Move;
+        state = State.Move;
         renderer = GetComponent<SpriteRenderer>();
 
         screenMousePosition = Input.mousePosition;
@@ -44,6 +39,12 @@ public class Player : MonoBehaviour {
         mousePosition = Camera.main.ScreenToWorldPoint(screenMousePosition);
 
         mousePosition.z = transform.position.z;
+
+        UpLeftWall = GameObject.Find("UpLeftWall");
+        DownRightWall = GameObject.Find("DownRightWall");
+
+        standDirectionArrow = transform.FindChild("StandDirection").gameObject;
+
     }
 	
 	// Update is called once per frame
@@ -58,31 +59,30 @@ public class Player : MonoBehaviour {
         switch (state)
         {
 
-            case PlayerState.Move:
+            case State.Move:
 
                 playerMove(playerSpeed);
 
                 //左クリックでチャージStateへ移行
-                if (Input.GetMouseButtonDown(0)) state = PlayerState.Charge;
+                if (Input.GetMouseButtonDown(0)) state = State.Charge;
 
                 break;
 
-            case PlayerState.Charge:
+            case State.Charge:
                 playerMove(chargeSpeed);
 
                 //左クリックを離すとアタックStateへ移行
-                if (Input.GetMouseButtonUp(0)) state = PlayerState.Attacking;
+                if (Input.GetMouseButtonUp(0)) state = State.Attacking;
 
                 break;
 
-            case PlayerState.Attacking:
+            case State.Attacking:
 
-                //とりあえずのステート変更
-                state = PlayerState.Move;
+                Invoke("ChengeStateMove", 1);
 
                 break;
 
-            case PlayerState.Damaging:
+            case State.Dameging:
 
                 //ダメージ演出したい
                 if (Time.time > nextTime)
@@ -96,32 +96,47 @@ public class Player : MonoBehaviour {
 
         }
 
-        
-	}
+        transform.position = (new Vector3(Mathf.Clamp(transform.position.x, UpLeftWall.transform.position.x + renderer.bounds.size.x / 2, DownRightWall.transform.position.x - renderer.bounds.size.x / 2),
+            Mathf.Clamp(transform.position.y, DownRightWall.transform.position.y + renderer.bounds.size.y / 2, UpLeftWall.transform.position.y - renderer.bounds.size.y / 2),
+            transform.position.z));
+
+    }
 
     /// <summary>
     /// プレイヤーの移動関数
     /// 色んなステートで呼ばれるよ
+    /// 矢印もここで管理します
     /// </summary>
     /// 引数：速度
     void playerMove(float arg_speed)
     {
-        float x = 0, y = 0;
 
+        //マウスの位置取得
         screenMousePosition = Input.mousePosition;
-        //Debug.Log(mousePosition);
 
         mousePosition = Camera.main.ScreenToWorldPoint(screenMousePosition);
 
-        mousePosition.z = transform.position.z;
+        mousePosition.z = 10;
+
+        //以下矢印の動き
+
+        Vector3 diff = (mousePosition - transform.position).normalized;
+        standDirectionArrow.transform.rotation = Quaternion.FromToRotation(Vector3.up, diff);
+        standDirectionArrow.transform.rotation = Quaternion.Euler(0, 0, standDirectionArrow.transform.rotation.eulerAngles.z);
+
+        //以下プレイヤーの動き
+
+        float x = 0, y = 0;
 
         if(transform.position.x < mousePosition.x)
         {
             x += arg_speed;
+            renderer.flipX = true;
         }
         else
         {
             x -= arg_speed;
+            renderer.flipX = false;
         }
 
         if (transform.position.y > mousePosition.y)
@@ -133,6 +148,10 @@ public class Player : MonoBehaviour {
             y += arg_speed;
         }
 
+        if (Mathf.Abs(Mathf.Abs(transform.position.x) - Mathf.Abs(mousePosition.x)) <= arg_speed) x = 0;
+        if (Mathf.Abs(Mathf.Abs(transform.position.y) - Mathf.Abs(mousePosition.y)) <= arg_speed) y = 0;
+
+        
         transform.position += new Vector3(x, y, 0);
     }
 
@@ -141,10 +160,10 @@ public class Player : MonoBehaviour {
     /// </summary>
     public void OnHit()
     {
-        if (state == PlayerState.Damaging) return;
+        if (state == State.Dameging) return;
 
         nextTime = Time.time;
-        state = PlayerState.Damaging;
+        state = State.Dameging;
         Invoke("ChengeStateMove", stopTime);
     }
 
@@ -155,7 +174,7 @@ public class Player : MonoBehaviour {
     {
         nextTime = 0;
         renderer.enabled = true;
-        state = PlayerState.Move;
+        state = State.Move;
 
     }
 }
