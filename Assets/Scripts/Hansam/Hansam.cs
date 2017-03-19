@@ -72,8 +72,8 @@ public class Hansam : MonoBehaviour {
             /* case Hansam_status.stay://AoS(アタック・オブ・スタンド)中に範囲内のハンサムは「時は止まる」
                  break;*/
 
-            case Hansam_status.hold:
-                Tracking();
+            case Hansam_status.hold://ブススタンドに捕まった
+                //Tracking(GetSpeed());
 
                 break;
             case Hansam_status.ugly://ブッさ
