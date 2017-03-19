@@ -26,6 +26,7 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	private Phantom m_phantom;
+	public Phantom Phantom { get { return m_phantom; } }
 
 	public void Initialize() {
 		Instantiate(Resources.Load<GameObject>("Prefabs/Player") , GameManager.Instance.transform.position , Quaternion.identity);

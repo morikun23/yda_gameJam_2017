@@ -29,6 +29,7 @@ public class Hansam : MonoBehaviour {
         status = Hansam_status.normal;                    //ハンサムの初期値はやっぱりイケメン
         sprite_reverse = GetComponent<SpriteRenderer>();
         escape = GetComponent<BoxCollider2D>();
+		escape.isTrigger = true;
     }
 
 	
@@ -108,9 +109,9 @@ public class Hansam : MonoBehaviour {
         if (other.gameObject.CompareTag("Player"))
         {
             //ブスと当たった時にブス(大山)から硬直発動の関数を発動
-            //GetComponent<Player>().OnHit();
+            other.gameObject.GetComponent<Player>().OnHit();
             
-            //status = Hansam_status.ugly;
+			status = Hansam_status.ugly;
             
             busu = true;//ブスに当たったときにトゥルーにする
         }
@@ -126,11 +127,21 @@ public class Hansam : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// ハンサムをブスに変えたときにすぐに逃げずに少しstay
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator Escape_Coroutine()
+	/// <summary>
+	/// 境界から出た時のアクション
+	/// </summary>
+	/// <param name="other"></param>
+	void OnTriggerExit2D(Collider2D other) {
+		if (other.gameObject.CompareTag("Border")) {
+			this.gameObject.SetActive(false);
+		}
+	}
+
+	/// <summary>
+	/// ハンサムをブスに変えたときにすぐに逃げずに少しstay
+	/// </summary>
+	/// <returns></returns>
+	IEnumerator Escape_Coroutine()
     {
 
 

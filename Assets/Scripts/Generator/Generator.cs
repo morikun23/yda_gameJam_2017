@@ -15,7 +15,7 @@ public class Generator : MonoBehaviour {
 	// Use this for initialization
 	public void Initialize () {
 		m_hansamPrefab = Resources.Load<GameObject>("Prefabs/Hansam");
-		Generate(2);
+		Generate(1);
 		StartCoroutine(Exec());
 	}
 	
@@ -30,7 +30,7 @@ public class Generator : MonoBehaviour {
 					break;
 				}
 			}
-			yield return new WaitForSeconds(Random.Range(5,20));
+			yield return new WaitForSeconds(Random.Range(5,7));
 		}
 	}
 
@@ -40,7 +40,7 @@ public class Generator : MonoBehaviour {
 
 		for (int i = 0; i < arg_max; i++) {
 			Hansam hansam = Instantiate(m_hansamPrefab ,
-				transform.position , Quaternion.identity).GetComponent<Hansam>();
+				transform.position , Quaternion.identity,this.transform).GetComponent<Hansam>();
 			hansam.gameObject.SetActive(false);
 			hansam.Player = PlayerManager.Instance.Player.transform;
 			m_hansams.Add(hansam);
