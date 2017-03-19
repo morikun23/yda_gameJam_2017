@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour {
+public class PlayerManager : PlayerBase {
 
     private static PlayerManager m_instance;
 
@@ -19,23 +19,8 @@ public class PlayerManager : MonoBehaviour {
     }
 
     private PlayerManager() { }
-
-    enum PlayerManagerState
-    {
-        Move,//動いてる状態
-        Charge,//スタンドを飛ばしている状態
-        Attacking,//スタンドとどっきんぐ中☆
-        Dameging//硬直なう
-
-    }
-
-    PlayerManagerState state;
-
-    //ドッキングポジション
-    public Vector3 centerPosition;
-
-    //攻撃範囲
-    float attackArea;
+	
+	private Player m_player;
 
     // Use this for initialization
     void Start () {
@@ -46,12 +31,12 @@ public class PlayerManager : MonoBehaviour {
 	void Update () {
 		
 	}
-
-
+	
     void Initialize()
     {
-        state = PlayerManagerState.Move;
+        state = State.Move;
         centerPosition = Vector3.zero;
         attackArea = 1;
+		m_player = FindObjectOfType<Player>();
     }
 }
