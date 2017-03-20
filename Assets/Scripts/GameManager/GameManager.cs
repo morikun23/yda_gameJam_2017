@@ -83,6 +83,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void ConvertChargePower() {
-		m_bonusPower = 1 +  (int)m_killedCount;
+		float t = ((float)m_killedCount / 70);
+		m_bonusPower = 1 + t;
 	}
 }

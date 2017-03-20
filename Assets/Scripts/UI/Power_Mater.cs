@@ -16,13 +16,12 @@ public class Power_Mater : MonoBehaviour
     void Update()
     {
         int power = (int)GameManager.Instance.GetKilledCount();
-        power=1;
-        image.fillAmount = power * 0.01f;
+        image.fillAmount = power * 0.05f;
 
         if (image.fillAmount >= 1)  //ＭＡＸ（fillAmountが1）まで到達するとAmountが0へと戻ります
         {
            
-            image.fillAmount = 0;
+            image.fillAmount = 1;
         }
 
 

@@ -14,6 +14,10 @@ public class PhantomCharge : MonoBehaviour , IPhantomState{
 
 	public void OnUpdate(Phantom arg_phantom) {
 
+		float bonusScale = GameManager.Instance.GetChargedPower();
+		if (bonusScale > 1.8f) { bonusScale = 1.8f; }
+		arg_phantom.transform.localScale = new Vector3(bonusScale , bonusScale , 1);
+
 		if (m_chargingCount < 1f) {
 			m_chargingCount += Time.deltaTime / arg_phantom.GetSpeed();
 		}

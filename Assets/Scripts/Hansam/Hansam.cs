@@ -108,7 +108,7 @@ public class Hansam : MonoBehaviour {
                  break;*/
 
             case Hansam_status.hold://彼がAoS「発動中」のブススタンドに捕まってしまいました。。。(ブスタンドにホールドされた)
-			transform.position = m_sandInfo.m_phantom.transform.position + (Vector3)m_sandInfo.m_distance;
+			transform.position = m_sandInfo.m_phantom.transform.position;
                 break;
 
             case Hansam_status.ugly://もう彼は以前のハンサムではなく、醜いブスに成り下がってしまいました(ブス化)

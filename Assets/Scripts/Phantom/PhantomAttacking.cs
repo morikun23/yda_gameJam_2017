@@ -22,6 +22,10 @@ public class PhantomAttacking : MonoBehaviour , IPhantomState{
 		arg_phantom.transform.position =
 			player.transform.position +
 			(Vector3)player.GetDirection().normalized * 4f * m_chargingCount;
+
+		if (arg_phantom.GetDistanceToPlayer() <= 0.5f) {
+			arg_phantom.transform.localScale = Vector3.one;
+		}
 	}
 
 	public void OnExit(Phantom arg_phantom) {

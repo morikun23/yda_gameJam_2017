@@ -17,7 +17,8 @@ public class AttackAreaViewer : MonoBehaviour {
 		PlayerManager playerManager = PlayerManager.Instance;
 
 		m_renderer.SetVertexCount((playerManager.Phantom.gameObject.activeInHierarchy)? 2:0);
-
+		m_renderer.startWidth = 1;
+		m_renderer.endWidth = GameManager.Instance.GetChargedPower();
 		m_renderer.SetPositions(new Vector3[2] {
 			playerManager.Player.transform.position + Vector3.back ,
 				playerManager.Phantom.transform.position + Vector3.back}
