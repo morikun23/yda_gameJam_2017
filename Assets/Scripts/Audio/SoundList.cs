@@ -7,7 +7,8 @@ public enum SE {
     busuhenka,
     charge,
     damage,
-    select
+    select,
+    bomb
 }
 
 /// <summary>
