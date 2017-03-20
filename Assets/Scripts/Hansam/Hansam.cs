@@ -6,6 +6,7 @@ using UnityEngine;
 /// ハンサムの移動やブスと当たった時のリアクションを管理したクラス
 /// </summary>
 public class Hansam : MonoBehaviour {
+    SpriteRenderer Deterioration;  //スプライトをブスに変更する
     float hansam_spd = 0.01f;      //ハンサムのスピード
     public Transform Player;       //ブス追尾のためにinspectorからブス格納
     int LR = 0;                    //ブス化後に掃ける方向を決める
@@ -13,22 +14,24 @@ public class Hansam : MonoBehaviour {
     bool busu = false;             //ブス化
     SpriteRenderer sprite_reverse; //左右移動で向きを変えるための変数
     BoxCollider2D escape;          //ブスになったハンサムが逃げる時にあたり判定をなくすため
+    public Sprite deterioration;    //ブス化(劣化)
 
     public enum Hansam_status{//ハンサムの状態管理をenumで番号付け
-        normal, //まだイケメン(0)
-        //stay, //AoS(1)
-        hold,   //AoSが「発動中」にブスタンドに触れた時の状態(1)
-        ugly    //ブサイクなう(2)
+        normal,  //まだイケメン(0)
+        //stay,  //AoS(1)
+        hold,    //AoSが「発動中」にブスタンドに触れた時の状態(1)
+        ugly     //ブサイクなう(2)
     }
 
     Hansam_status status;//ハンサムのステータス
- 
+  
     // Use this for initialization
     void OnEnable () {//inspector上でオブジェクトが「trueになった時」に呼び出される関数
         LR = Random.Range(0, 2);                          //左右どっちに掃けるかをランダムで決める(0以上2未満→int型のため実質0か1)
-        status = Hansam_status.normal;                    //ハンサムの初期値はやっぱりイケメン
+        status = Hansam_status.hold;                    //ハンサムの初期値はやっぱりイケメン
         sprite_reverse = GetComponent<SpriteRenderer>();
         escape = GetComponent<BoxCollider2D>();
+        Deterioration = gameObject.GetComponent<SpriteRenderer>();
     }
 
 	
@@ -135,7 +138,7 @@ public class Hansam : MonoBehaviour {
 
 
         //ここで見た目変更の処理
-
+        Deterioration.sprite = deterioration;
 
 
         yield return new WaitForSeconds(0.5f); // num秒待機
