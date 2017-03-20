@@ -221,6 +221,6 @@ public class Hansam : MonoBehaviour {
 	}
 
 	void ChangeForm() {
-		GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Player/Player");
+		GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Hanbusa/Hanbusa");
 	}
 }

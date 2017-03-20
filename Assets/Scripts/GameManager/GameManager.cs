@@ -25,20 +25,17 @@ public class GameManager : MonoBehaviour {
 
 	private IGamePhase m_currentPhase;
 
-	PlayerManager m_playerManager;
+	public PlayerManager m_playerManager;
 
 	// Use this for initialization
 	void Start () {
+		DontDestroyOnLoad(this.gameObject);
 		Initialize();
-		m_playerManager = PlayerManager.Instance;
-		m_playerManager.Initialize();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
-		m_playerManager.UpdateByFrame();
-
 		if(GetCurrentPhase() == "Playing") {
 			m_limitTime -= Time.deltaTime;
 		}

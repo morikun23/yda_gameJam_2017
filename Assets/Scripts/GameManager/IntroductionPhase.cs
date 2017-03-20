@@ -11,6 +11,8 @@ public class IntroductionPhase : MonoBehaviour , IGamePhase {
 
 
 	public void OnEnter(GameManager arg_gameManager) {
+		arg_gameManager.m_playerManager = PlayerManager.Instance;
+		arg_gameManager.m_playerManager.Initialize();
 		//カウントダウンスタート
 		m_countDownText = GameObject.Find("GameText").GetComponent<Text>();
 		m_countDownText.color = Color.white;
@@ -18,6 +20,10 @@ public class IntroductionPhase : MonoBehaviour , IGamePhase {
 	}
 
 	public void OnUpdate(GameManager arg_gameManager) {
+
+		arg_gameManager.m_playerManager.UpdateByFrame();
+
+
 		//カウントダウン中
 		m_countDownTime -= Time.deltaTime;
 

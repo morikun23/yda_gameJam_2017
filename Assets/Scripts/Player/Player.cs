@@ -107,10 +107,10 @@ public class Player : PlayerBase{
 
             case State.Damaging:
 
-                playerMove(chargeSpeed);
+			playerMove(playerSpeed);
 
-                //ダメージ演出したい
-                if (Time.time > nextTime)
+			//ダメージ演出したい
+			if (Time.time > nextTime)
                 {
                     renderer.enabled = !renderer.enabled;
 

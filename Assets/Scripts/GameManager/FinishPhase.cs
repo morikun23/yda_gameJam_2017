@@ -18,10 +18,13 @@ public class FinishPhase : MonoBehaviour , IGamePhase {
 		m_gameText.text = "しゅ～りょ～！";
 		m_gameText.color = Color.yellow;
 
+		arg_gameManager.m_playerManager.UpdateByFrame();
+
 		m_elapsedTime += Time.deltaTime;
 
 		if(m_elapsedTime >= 1.5f) {
 			SceneTransition();
+			arg_gameManager.PhaseTransition(new ResultPhase());
 		}
 	}
 

@@ -16,6 +16,9 @@ public class PlayingPhase : MonoBehaviour , IGamePhase {
 	}
 
 	public void OnUpdate(GameManager arg_gameManager) {
+
+		arg_gameManager.m_playerManager.UpdateByFrame();
+
 		if (arg_gameManager.GetLimitTime() <= 0) {
 			arg_gameManager.PhaseTransition(new FinishPhase());
 		}

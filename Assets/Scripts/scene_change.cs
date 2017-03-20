@@ -7,7 +7,9 @@ public class scene_change : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		if (GameObject.Find("GameManager")) {
+			Destroy(GameObject.Find("GameManager"));
+		}
 	}
 	
 	// Update is called once per frame
