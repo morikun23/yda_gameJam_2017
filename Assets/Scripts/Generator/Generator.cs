@@ -40,7 +40,7 @@ public class Generator : MonoBehaviour {
 
 		for (int i = 0; i < arg_max; i++) {
 			Hansam hansam = Instantiate(m_hansamPrefab ,
-				transform.position , Quaternion.identity,this.transform).GetComponent<Hansam>();
+				transform.position , Quaternion.identity).GetComponent<Hansam>();
 			hansam.gameObject.SetActive(false);
 			hansam.Player = PlayerManager.Instance.Player.transform;
 			m_hansams.Add(hansam);

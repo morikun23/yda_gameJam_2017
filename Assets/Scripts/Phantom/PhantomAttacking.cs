@@ -4,27 +4,24 @@ using UnityEngine;
 
 public class PhantomAttacking : MonoBehaviour , IPhantomState{
 
-	private Vector3 m_startPosition;
-	private Vector3 m_endPosition;
-	private int m_t;
-	private const int MAX = 30;
+	private float m_chargingCount;
 
 	public void OnEnter(Phantom arg_phantom) {
-		m_startPosition = arg_phantom.transform.position;
-		m_endPosition = PlayerManager.Instance.Player.transform.position;
-		m_t = 0;
+		m_chargingCount = 1;
+		arg_phantom.GetComponent<BoxCollider2D>().enabled = true;
 	}
 
 	public void OnUpdate(Phantom arg_phantom) {
 
-		if (Arrived()) {
-			return;
+		if (m_chargingCount > 0f) {
+			m_chargingCount -= Time.deltaTime / arg_phantom.GetSpeed();
 		}
 
-		//スムーズに補完しながら移動
-		Vector3 velocity = (m_endPosition - m_startPosition) / MAX;
-		arg_phantom.transform.position += velocity;
-		m_t++;		
+		Player player = PlayerManager.Instance.Player;
+
+		arg_phantom.transform.position =
+			player.transform.position +
+			(Vector3)player.GetDirection().normalized * 4f * m_chargingCount;
 	}
 
 	public void OnExit(Phantom arg_phantom) {
@@ -34,8 +31,5 @@ public class PhantomAttacking : MonoBehaviour , IPhantomState{
 	public PlayerBase.State GetCurrentState() {
 		return PlayerBase.State.Attacking;
 	}
-
-	private bool Arrived() {
-		return m_t >= MAX;
-	}
+	
 }

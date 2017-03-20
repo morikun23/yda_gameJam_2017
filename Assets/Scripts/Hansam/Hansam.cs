@@ -16,6 +16,19 @@ public class Hansam : MonoBehaviour {
     BoxCollider2D escape;          //ブスになったハンサムが逃げる時にあたり判定をなくすため
     public Sprite deterioration;    //ブス化(劣化)
 
+
+	private class SandInfo {
+		public Phantom m_phantom { get; private set; }
+		public Vector2 m_distance { get; private set; }
+
+		public void Set(Hansam arg_hansam,Phantom arg_phantom) {
+			m_phantom = arg_phantom;
+			m_distance = arg_hansam.transform.position - arg_phantom.transform.position;
+		}
+	}
+
+	SandInfo m_sandInfo = new SandInfo();
+
     public enum Hansam_status{//ハンサムの状態管理をenumで番号付け
         normal,  //まだイケメン(0)
         //stay,  //AoS(1)
@@ -32,9 +45,10 @@ public class Hansam : MonoBehaviour {
         sprite_reverse = GetComponent<SpriteRenderer>();
         escape = GetComponent<BoxCollider2D>();
         Deterioration = gameObject.GetComponent<SpriteRenderer>();
-		escape.isTrigger = true;
-        
-    }
+		escape.enabled = true;
+		GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Hansam/Hansam");
+		ishold = false;
+	}
 
 	
 	// Update is called once per frame
@@ -85,14 +99,13 @@ public class Hansam : MonoBehaviour {
                  break;*/
 
             case Hansam_status.hold://彼がAoS「発動中」のブススタンドに捕まってしまいました。。。(ブスタンドにホールドされた)
-                
-                
+			transform.position = m_sandInfo.m_phantom.transform.position + (Vector3)m_sandInfo.m_distance;
                 break;
 
             case Hansam_status.ugly://もう彼は以前のハンサムではなく、醜いブスに成り下がってしまいました(ブス化)
-                
                 StartCoroutine("Escape_Coroutine");//0.5秒後に逃げる
-                break;
+			break;
+
             default:
                 LR = 0;
                 break;
@@ -109,21 +122,23 @@ public class Hansam : MonoBehaviour {
         {
             if (ishold)
             {
-                gameObject.transform.parent = null;
                 status = Hansam_status.ugly;
+				Explosion();
             }
             else {//ホールド中でなければプレイヤーにダメージ処理
                 //ブスと当たった時にブス(大山)から硬直発動の関数を発動
                 other.gameObject.GetComponent<Player>().OnHit();
-                escape.isTrigger = false;
+				escape.enabled = false;
                 status = Hansam_status.ugly;
             }
-        }
-        
+
+			
+		}
+
         //アタック・オブ・スタンドに当たった時にホールド状態になる
         if (other.gameObject.tag == "BusuStand")
         {
-            this.transform.parent = other.gameObject.transform;
+			m_sandInfo.Set(this , other.GetComponent<Phantom>());
             ishold = true;
             status = Hansam_status.hold;//ハンサムの状態をホールド状態にする
 
@@ -147,13 +162,9 @@ public class Hansam : MonoBehaviour {
 	/// <returns></returns>
 	IEnumerator Escape_Coroutine()
     {
-
-
         //ここで見た目変更の処理
         Deterioration.sprite = deterioration;
         
-
-
         yield return new WaitForSeconds(0.5f); // num秒待機
         switch (LR)//L = 左(0),R = 右(1)
         {
@@ -167,4 +178,17 @@ public class Hansam : MonoBehaviour {
                 break;
         }
     }
+
+	/// <summary>
+	/// 爆発エフェクトを出すよ
+	/// </summary>
+	void Explosion() {
+		GameObject eff = Instantiate(Resources.Load<GameObject>("Effect/Explosion") , transform.position , Quaternion.identity);
+		Invoke("ChangeForm" , 0.5f);
+		Destroy(eff , 1);
+	}
+
+	void ChangeForm() {
+		GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Player/Player");
+	}
 }

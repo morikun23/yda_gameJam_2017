@@ -31,6 +31,7 @@ public class Phantom : PlayerBase {
 	}
 
 	public void Initialize() {
+		m_speed = 0.5f;
 		m_currentState = new PhantomMove();
 		m_currentState.OnEnter(this);
 	}
@@ -56,4 +57,5 @@ public class Phantom : PlayerBase {
 	public PlayerBase.State GetCurrentState() {
 		return m_currentState.GetCurrentState();
 	}
+	
 }

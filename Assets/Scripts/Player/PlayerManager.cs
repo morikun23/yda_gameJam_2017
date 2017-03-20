@@ -47,7 +47,6 @@ public class PlayerManager : MonoBehaviour {
 	
 	private void ConvertStateIfNeed(PlayerBase.State arg_playerState,IPhantomState arg_phantomState) {
 		if (IsSameState(arg_playerState , m_phantom.GetCurrentState())) return;
-		Debug.Log("ステート変更");
 		m_phantom.StateTransition(arg_phantomState);
 	}
 

@@ -30,7 +30,7 @@ public class Player : PlayerBase{
     //エフェクト
     public GameObject effect;
 
-    float attackingTime = 1;
+    float attackingTime = 0.5f;
 
     // Use this for initialization
     void Start () {
@@ -82,14 +82,12 @@ public class Player : PlayerBase{
                 if (Input.GetMouseButtonUp(0))
                 {
                     state = State.Attacking;
-                    Invoke("Explosion", attackingTime);
-                }
+					Invoke("ChengeStateMove" , attackingTime);
+				}
                 break;
 
             case State.Attacking:
-
-                Invoke("ChengeStateMove", attackingTime);
-
+				
                 break;
 
             case State.Damaging:
