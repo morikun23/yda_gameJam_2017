@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 26053824ab1238a4190bf5bbf429acd0
 folderAsset: yes
 timeCreated: 1489957478
+=======
+guid: f3ade6a14ea63b945a1d514e8023477e
+folderAsset: yes
+timeCreated: 1489974813
+>>>>>>> origin/kaiahtsu
 licenseType: Free
 DefaultImporter:
   userData: 

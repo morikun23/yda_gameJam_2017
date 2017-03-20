@@ -10,20 +10,19 @@ public class Power_Mater : MonoBehaviour
     {
         image = GetComponent<Image>();
         Debug.Log("ここまで到達①");　//チェックログ①
+        image.fillAmount = 0;
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) //今が左クリックで0.02ずつfillAmountが増えていきます
-        {
-            image.fillAmount += 0.02f;
-            Debug.Log("ボタンが押されておりました");//チェックログ②
+        int power = (int)GameManager.Instance.GetKilledCount();
+        image.fillAmount += power * 0.02f;
 
-            if (image.fillAmount >= 1)  //ＭＡＸ（1）まで到達するとAmountが0へと戻ります
-            {
-                image.fillAmount = 0;
-            }
+        if (image.fillAmount >= 1)  //ＭＡＸ（fillAmountが1）まで到達するとAmountが0へと戻ります
+        {
+            image.fillAmount = 1;
         }
+
 
     }
 }
