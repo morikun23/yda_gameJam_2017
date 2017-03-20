@@ -27,6 +27,11 @@ public class Player : PlayerBase{
     //スタンドを出す方向を示す矢印関連
     GameObject standDirectionArrow;
 
+    //エフェクト
+    public GameObject effect;
+
+    float attackingTime = 1;
+
     // Use this for initialization
     void Start () {
 
@@ -74,17 +79,22 @@ public class Player : PlayerBase{
                 playerMove(chargeSpeed);
 
                 //左クリックを離すとアタックStateへ移行
-                if (Input.GetMouseButtonUp(0)) state = State.Attacking;
-
+                if (Input.GetMouseButtonUp(0))
+                {
+                    state = State.Attacking;
+                    Invoke("Explosion", attackingTime);
+                }
                 break;
 
             case State.Attacking:
 
-                Invoke("ChengeStateMove", 1);
+                Invoke("ChengeStateMove", attackingTime);
 
                 break;
 
             case State.Damaging:
+
+                playerMove(chargeSpeed);
 
                 //ダメージ演出したい
                 if (Time.time > nextTime)
@@ -162,7 +172,7 @@ public class Player : PlayerBase{
     /// </summary>
     public void OnHit()
     {
-        if (state == State.Damaging) return;
+        if (state == State.Damaging || state == State.Attacking) return;
 
         nextTime = Time.time;
         state = State.Damaging;
@@ -188,7 +198,18 @@ public class Player : PlayerBase{
         return state;
     }
 
-	public Vector2 GetDirection() {
+    /// <summary>
+    /// 爆発エフェクトを出すよ
+    /// </summary>
+    void Explosion()
+    {
+        if (state == State.Damaging) return;
+
+        GameObject eff = Instantiate(Resources.Load<GameObject>("Effect/Explosion"), transform.position,Quaternion.identity);
+        Destroy(eff, 1);
+    }
+
+    public Vector2 GetDirection() {
 		return mousePosition - transform.position; 
 	}
 }
