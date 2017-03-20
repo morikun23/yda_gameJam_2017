@@ -3,11 +3,11 @@
 /// ※フォルダに入っている名前と一致させること
 /// </summary>
 public enum SE {
-    attack,
-    busuhenka,
-    charge,
-    damage,
-    select
+    Attack,
+    BusuHenka,
+    Charge,
+    Damage,
+    Select
 }
 
 /// <summary>

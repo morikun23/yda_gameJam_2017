@@ -5,7 +5,12 @@ using UnityEngine;
 public class PlayingPhase : MonoBehaviour , IGamePhase {
 
 	public void OnEnter(GameManager arg_gameManager) {
-		foreach(Generator generator in FindObjectsOfType<Generator>()) {
+
+		Sound bgm = new Sound(Vector2.zero , BGM.Battle);
+		bgm.audioSource.loop = true;
+		bgm.audioSource.Play();
+
+		foreach (Generator generator in FindObjectsOfType<Generator>()) {
 			generator.Initialize();
 		}
 	}

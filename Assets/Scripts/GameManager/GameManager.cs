@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		
 		m_playerManager.UpdateByFrame();
 
 		if(GetCurrentPhase() == "Playing") {
@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour {
 	public void Initialize() {
 		m_killedCount = 0;
 		m_bonusPower = 1;
-		m_limitTime = 30f;
+		m_limitTime = 60f;
 		m_currentPhase = new IntroductionPhase();
 		m_currentPhase.OnEnter(this);
 	}
