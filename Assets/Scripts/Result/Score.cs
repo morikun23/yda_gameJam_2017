@@ -7,33 +7,31 @@ public class Score : MonoBehaviour {
 
     public Text scoreNo1, scoreNo2, scoreNo3;
     int i,rank1,rank2,rank3;
+
+    int score;
+    int nowScore;
+    int buff;
+
 	// Use this for initialization
 	void Start () {
-		
-	}
+        nowScore = 0;
+        buff = 0;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        /*int high_score = (int)GameManager.Instance.GetKilledCount();
-        high_score++;
-        */
-        int highScore = PlayerPrefs.GetInt("scoreNo1", 0);
-    //    scoreNo1.text = "abcde";
 
+        //今回のスコアの取得
+        nowScore = GameManager.Instance.GetKilledCount();
 
-        rank1 = 22;
-        rank2 = 44;
-        rank3 = 72;
+        if (rank1 < nowScore) rank1 = nowScore;
+        else if(rank2 < nowScore) rank2 = nowScore;
+        else if (rank3 < nowScore) rank3 = nowScore;
 
-        for (i = 1; i < 3; i++)
+        for (i = 0; i < 3; i++)
         {
-            if (rank1 < rank2)
-            {
-                scoreNo1.text="rank1";
-            }else if(rank2<rank1)
-            {
-
-            }
+            buff = rank1;
+            //rank1 = 
         }
 
 	}
