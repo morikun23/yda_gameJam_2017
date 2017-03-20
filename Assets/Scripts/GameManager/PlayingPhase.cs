@@ -19,7 +19,23 @@ public class PlayingPhase : MonoBehaviour , IGamePhase {
 		if (arg_gameManager.GetLimitTime() <= 0) {
 			arg_gameManager.PhaseTransition(new FinishPhase());
 		}
-	}
+
+        if (arg_gameManager.GetKilledCount() == 15)
+        {
+            foreach (Generator generator in FindObjectsOfType<Generator>())
+            {
+                generator.Generate(1);
+            }
+        }
+
+        if (arg_gameManager.GetKilledCount() == 30)
+        {
+            foreach (Generator generator in FindObjectsOfType<Generator>())
+            {
+                generator.Generate(1);
+            }
+        }
+    }
 
 	public void OnExit(GameManager arg_gameManager) {
 		
