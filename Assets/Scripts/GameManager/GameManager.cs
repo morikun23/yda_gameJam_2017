@@ -19,21 +19,26 @@ public class GameManager : MonoBehaviour {
 
 	private int m_killedCount;
 
-	private int m_chargePower;
+	private int m_bonusPower;
 
 	private float m_limitTime;
 
 	private IGamePhase m_currentPhase;
 
+	PlayerManager m_playerManager;
+
 	// Use this for initialization
 	void Start () {
 		Initialize();
-		m_currentPhase = new IntroductionPhase();
-		m_currentPhase.OnEnter(this);
+		m_playerManager = PlayerManager.Instance;
+		m_playerManager.Initialize();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		m_playerManager.UpdateByFrame();
+
 		if(GetCurrentPhase() == "Playing") {
 			m_limitTime -= Time.deltaTime;
 		}
@@ -51,8 +56,10 @@ public class GameManager : MonoBehaviour {
 
 	public void Initialize() {
 		m_killedCount = 0;
-		m_chargePower = 1;
+		m_bonusPower = 1;
 		m_limitTime = 30f;
+		m_currentPhase = new IntroductionPhase();
+		m_currentPhase.OnEnter(this);
 	}
 
 	public int GetKilledCount() {
@@ -60,7 +67,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public int GetChargedPower() {
-		return m_chargePower;
+		return m_bonusPower;
 	}
 
 	public float GetLimitTime() {
