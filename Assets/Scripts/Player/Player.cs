@@ -100,7 +100,9 @@ public class Player : PlayerBase{
                 break;
 
             case State.Attacking:
-				
+
+                GetComponent<Animator>().SetTrigger("Booon");
+
                 break;
 
             case State.Damaging:
