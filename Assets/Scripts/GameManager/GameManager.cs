@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour {
 
 	private int m_killedCount;
 
-	private int m_bonusPower;
+	private float m_bonusPower;
 
 	private float m_limitTime;
 
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour {
 		return m_killedCount;
 	}
 
-	public int GetChargedPower() {
+	public float GetChargedPower() {
 		return m_bonusPower;
 	}
 
@@ -83,6 +83,6 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void ConvertChargePower() {
-		//プレイヤーのチャージ力を取得する
+		m_bonusPower = 1 +  (int)m_killedCount;
 	}
 }

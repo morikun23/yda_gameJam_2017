@@ -18,6 +18,8 @@ public class Phantom : PlayerBase {
 	
 	// Update is called once per frame
 	void Update () {
+		
+		transform.localScale = new Vector3(GameManager.Instance.GetChargedPower() , GameManager.Instance.GetChargedPower() , 1);
 
 		Vector3 playerPos = PlayerManager.Instance.Player.transform.position;
 		Vector3 myPos = this.transform.position;
