@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class FinishPhase : MonoBehaviour , IGamePhase {
 
@@ -35,5 +36,8 @@ public class FinishPhase : MonoBehaviour , IGamePhase {
 	private void SceneTransition() {
 		//テキストクリア
 		m_gameText.text = "";
+
+        SceneManager.LoadScene("Result");
+        
 	}
 }

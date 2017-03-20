@@ -71,8 +71,16 @@ public class Player : PlayerBase{
                 playerMove(playerSpeed);
 
                 //左クリックでチャージStateへ移行
-                if (Input.GetMouseButtonDown(0)) state = State.Charge;
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Sound sound;
+                    sound = new Sound();
+                    sound.SetSound(SE.Charge);
+                    sound.audioSource.Play();
 
+                    state = State.Charge;
+
+                }
                 break;
 
             case State.Charge:
@@ -81,6 +89,11 @@ public class Player : PlayerBase{
                 //左クリックを離すとアタックStateへ移行
                 if (Input.GetMouseButtonUp(0))
                 {
+                    Sound sound;
+                    sound = new Sound();
+                    sound.SetSound(SE.Attack);
+                    sound.audioSource.Play();
+
                     state = State.Attacking;
 					Invoke("ChengeStateMove" , attackingTime);
 				}
@@ -158,8 +171,8 @@ public class Player : PlayerBase{
             y += arg_speed;
         }
 
-        if (Mathf.Abs(Mathf.Abs(transform.position.x) - Mathf.Abs(mousePosition.x)) <= arg_speed) x = 0;
-        if (Mathf.Abs(Mathf.Abs(transform.position.y) - Mathf.Abs(mousePosition.y)) <= arg_speed) y = 0;
+        if (Mathf.Abs(Mathf.Abs(transform.position.x) - Mathf.Abs(mousePosition.x)) <= arg_speed+0.5f) x = 0;
+        if (Mathf.Abs(Mathf.Abs(transform.position.y) - Mathf.Abs(mousePosition.y)) <= arg_speed+0.6f) y = 0;
 
         
         transform.position += new Vector3(x, y, 0);
@@ -174,6 +187,10 @@ public class Player : PlayerBase{
 
         nextTime = Time.time;
         state = State.Damaging;
+        Sound sound;
+        sound = new Sound();
+        sound.SetSound(SE.Damage);
+        sound.audioSource.Play();
         Invoke("ChengeStateMove", stopTime);
     }
 
@@ -194,17 +211,6 @@ public class Player : PlayerBase{
     public State GetState()
     {
         return state;
-    }
-
-    /// <summary>
-    /// 爆発エフェクトを出すよ
-    /// </summary>
-    void Explosion()
-    {
-        if (state == State.Damaging) return;
-
-        GameObject eff = Instantiate(Resources.Load<GameObject>("Effect/Explosion"), transform.position,Quaternion.identity);
-        Destroy(eff, 1);
     }
 
     public Vector2 GetDirection() {

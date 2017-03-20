@@ -16,8 +16,12 @@ public class Hansam : MonoBehaviour {
     BoxCollider2D escape;          //ブスになったハンサムが逃げる時にあたり判定をなくすため
     public Sprite deterioration;    //ブス化(劣化)
 
+    GameObject ase;//汗
+    bool aseFlag;
+    float nextTime;
+    float interval;
 
-	private class SandInfo {
+    private class SandInfo {
 		public Phantom m_phantom { get; private set; }
 		public Vector2 m_distance { get; private set; }
 
@@ -48,7 +52,12 @@ public class Hansam : MonoBehaviour {
 		escape.enabled = true;
 		GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Hansam/Hansam");
 		ishold = false;
-	}
+        ase = transform.FindChild("ase").gameObject;
+        ase.SetActive(false);
+        nextTime = 0;
+        interval = 0.1f;
+        aseFlag = false;
+    }
 
 	
 	// Update is called once per frame
@@ -103,6 +112,13 @@ public class Hansam : MonoBehaviour {
                 break;
 
             case Hansam_status.ugly://もう彼は以前のハンサムではなく、醜いブスに成り下がってしまいました(ブス化)
+                //ダメージ演出したい
+                if (Time.time > nextTime && aseFlag == true)
+                {
+                    ase.SetActive(!ase.active);
+
+                    nextTime += interval;
+                }
                 StartCoroutine("Escape_Coroutine");//0.5秒後に逃げる
 			break;
 
@@ -117,18 +133,25 @@ public class Hansam : MonoBehaviour {
     /// </summary>
     void OnTriggerEnter2D(Collider2D other)
     {
-        
+
+        if (status == Hansam_status.ugly) return;
+
         if (other.gameObject.CompareTag("Player"))
         {
             if (ishold)
             {
+                Sound sound;
+                sound = new Sound();
+                sound.SetSound(SE.BusuHenka);
+                sound.audioSource.Play();
                 status = Hansam_status.ugly;
+                
+                GameManager.Instance.AddKilledCount();
 				Explosion();
             }
             else {//ホールド中でなければプレイヤーにダメージ処理
                 //ブスと当たった時にブス(大山)から硬直発動の関数を発動
                 other.gameObject.GetComponent<Player>().OnHit();
-				escape.enabled = false;
                 status = Hansam_status.ugly;
             }
 
@@ -183,7 +206,16 @@ public class Hansam : MonoBehaviour {
 	/// 爆発エフェクトを出すよ
 	/// </summary>
 	void Explosion() {
-		GameObject eff = Instantiate(Resources.Load<GameObject>("Effect/Explosion") , transform.position , Quaternion.identity);
+        Sound sound = new Sound();
+        sound.SetSound(SE.Bomb);
+        sound.SetPosition(transform.position);
+        sound.audioSource.Play();
+
+        ase.SetActive(true);
+        nextTime = Time.time;
+        aseFlag = true;
+
+        GameObject eff = Instantiate(Resources.Load<GameObject>("Effect/Explosion") , transform.position , Quaternion.identity);
 		Invoke("ChangeForm" , 0.5f);
 		Destroy(eff , 1);
 	}
