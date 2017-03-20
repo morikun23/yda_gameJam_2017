@@ -11,7 +11,7 @@ public class Hansam : MonoBehaviour {
     public Transform Player;       //ブス追尾のためにinspectorからブス格納
     int LR = 0;                    //ブス化後に掃ける方向を決める
     float rad;
-    bool busu = false;             //ブス化
+    bool ishold = false;             //ホールド中か否か
     SpriteRenderer sprite_reverse; //左右移動で向きを変えるための変数
     BoxCollider2D escape;          //ブスになったハンサムが逃げる時にあたり判定をなくすため
     public Sprite deterioration;    //ブス化(劣化)
@@ -28,14 +28,12 @@ public class Hansam : MonoBehaviour {
     // Use this for initialization
     void OnEnable () {//inspector上でオブジェクトが「trueになった時」に呼び出される関数
         LR = Random.Range(0, 2);                          //左右どっちに掃けるかをランダムで決める(0以上2未満→int型のため実質0か1)
-        status = Hansam_status.hold;                    //ハンサムの初期値はやっぱりイケメン
+        status = Hansam_status.normal;                    //ハンサムの初期値はやっぱりイケメン
         sprite_reverse = GetComponent<SpriteRenderer>();
         escape = GetComponent<BoxCollider2D>();
-<<<<<<< HEAD
         Deterioration = gameObject.GetComponent<SpriteRenderer>();
-=======
 		escape.isTrigger = true;
->>>>>>> origin/master
+        
     }
 
 	
@@ -81,23 +79,18 @@ public class Hansam : MonoBehaviour {
             
             case Hansam_status.normal://まだ彼がハンサムである時の時代(ブスを追尾してくる)
                 Tracking(hansam_spd); //
-                busu = false;
 
                 break;
             /* case Hansam_status.stay://AoS(アタック・オブ・スタンド)中に範囲内のハンサムは「時は止まる」
                  break;*/
 
             case Hansam_status.hold://彼がAoS「発動中」のブススタンドに捕まってしまいました。。。(ブスタンドにホールドされた)
-
-                //Tracking()の引数にブスタンドの速さを入れる()
-                float test_spd = 0.02f;
-                Tracking(test_spd);
-                //ホールド中にブス本体に当たった場合ハンサムはブスに変わる
-                if (busu) status = Hansam_status.ugly;
+                
+                
                 break;
 
             case Hansam_status.ugly://もう彼は以前のハンサムではなく、醜いブスに成り下がってしまいました(ブス化)
-                escape.isTrigger = false;
+                
                 StartCoroutine("Escape_Coroutine");//0.5秒後に逃げる
                 break;
             default:
@@ -114,22 +107,27 @@ public class Hansam : MonoBehaviour {
         
         if (other.gameObject.CompareTag("Player"))
         {
-            //ブスと当たった時にブス(大山)から硬直発動の関数を発動
-            other.gameObject.GetComponent<Player>().OnHit();
-            
-			status = Hansam_status.ugly;
-            
-            busu = true;//ブスに当たったときにトゥルーにする
+            if (ishold)
+            {
+                gameObject.transform.parent = null;
+                status = Hansam_status.ugly;
+            }
+            else {//ホールド中でなければプレイヤーにダメージ処理
+                //ブスと当たった時にブス(大山)から硬直発動の関数を発動
+                other.gameObject.GetComponent<Player>().OnHit();
+                escape.isTrigger = false;
+                status = Hansam_status.ugly;
+            }
         }
-        /*//ザ・ワールド
-        if(other.gameObject.tag == "BusuArea")
-        {
-            status = Hansam_status.stay;
-        }*/
-        //アタック・オブ・スタンド時に当たった時にブスになる(タイミングはAoS発動時にBOX判定でハンサム固定)
+        
+        //アタック・オブ・スタンドに当たった時にホールド状態になる
         if (other.gameObject.tag == "BusuStand")
         {
+            this.transform.parent = other.gameObject.transform;
+            ishold = true;
             status = Hansam_status.hold;//ハンサムの状態をホールド状態にする
+
+
         }
     }
 
@@ -153,6 +151,7 @@ public class Hansam : MonoBehaviour {
 
         //ここで見た目変更の処理
         Deterioration.sprite = deterioration;
+        
 
 
         yield return new WaitForSeconds(0.5f); // num秒待機
